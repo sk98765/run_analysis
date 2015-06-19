@@ -1,9 +1,12 @@
 require(dplyr)
 require(data.table)
+
 # Read in column titles 
 cname <- read.table("features.txt")
 vname <- as.vector(cname)
 rm(cname)
+
+# Keep the variable name only (V2)
 vname <- vname$V2
 
 # Read in training and test set 
@@ -21,6 +24,7 @@ rm(f1,f2)
 ff_mean <- ff[,grep("mean",colnames(ff))]
 ff_std <- ff[,grep("std",colnames(ff))]
 
+# Use column combind to come mean columns and std columns together
 ff_tidy <- cbind(ff_mean,ff_std)
 rm(ff,ff_mean,ff_std)
 
@@ -29,6 +33,7 @@ rm(ff,ff_mean,ff_std)
 c1 <- read.table("y_train.txt", col.names = c("Activity"))
 c2 <- read.table("y_test.txt", col.names = c("Activity"))
 
+# Use row combine combines c1 and c2 together
 c_act <- rbind(c1,c2)
 rm(c1,c2)
 
@@ -51,16 +56,19 @@ c_act[c_act$Activity == 6,] <- "LAYING"
 s1 <- read.table("subject_train.txt", col.names = c("Subject"))
 s2 <- read.table("subject_test.txt", col.names = c("Subject"))
 
+# Use rbind to combine s1 and s2 togehter
 s_subject <- rbind(s1,s2)
 rm(s1,s2)
 
-# Combine c_act with ff_tidy
+# Create a tidy data with subject, activity and functions 
 df_tidy <- cbind(s_subject,c_act,ff_tidy)
 rm(s_subject,c_act,ff_tidy)
 
+# Assign the tidy data to another data.table
 dt2 <- as.data.table(df_tidy)
 rm(df_tidy)
 
+# Apply mean to all the functions by Activity and Subject
 final_dt <- dt2[, lapply(.SD, mean), by = .(Activity, Subject)]
 
-
+write.table(final_dt, "results.txt", row.names = FALSE)
