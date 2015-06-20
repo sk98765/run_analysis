@@ -1,15 +1,16 @@
-# run_analysis
+# run_analysis.R
 Getting and Cleaning Data project
 ## This script will read the following files so make sure 
 those files are exist in the same directory
-* X_train.txt
-* X_test.txt
-* y_train.txt
-* y_test.txt
-* features.txt
-* subject_train.txt
-* subject_test.txt
-## Program working flow
+1 X_train.txt
+2 X_test.txt
+3 y_train.txt
+4 y_test.txt
+5 features.txt
+6 subject_train.txt
+7 subject_test.txt
+
+# Program working flow
 * First the code will read in the features.txt and store these 
 name to vname variable
 * Use read.table to read in both X_train.txt and X_test.txt file with 
